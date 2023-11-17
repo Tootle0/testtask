@@ -1,0 +1,98 @@
+swagger: '2.0'
+info:
+  title: 'MyApp API'
+  description: 'API for handling queries and results'
+  version: '1.0'
+paths:
+  /query/{cadastre_number}/:
+    get:
+      summary: 'Submit a query'
+      parameters:
+        - name: cadastre_number
+          in: path
+          required: true
+          type: string
+          description: 'Cadastre number for the query'
+        - name: latitude
+          in: query
+          required: true
+          type: number
+          description: 'Latitude for the query'
+        - name: longitude
+          in: query
+          required: true
+          type: number
+          description: 'Longitude for the query'
+      responses:
+        201:
+          description: 'Query submitted successfully'
+          schema:
+            $ref: '#/definitions/Query'
+  /result/{query_id}/:
+    get:
+      summary: 'Get query result'
+      responses:
+        200:
+          description: 'Method GET processed successfully'
+    post:
+      summary: 'Update query result'
+      parameters:
+        - name: query_id
+          in: path
+          required: true
+          type: integer
+          description: 'ID of the query to update'
+        - name: result
+          in: formData
+          required: true
+          type: boolean
+          description: 'Result value (true/false)'
+      responses:
+        200:
+          description: 'Query result updated successfully'
+          schema:
+            $ref: '#/definitions/Query'
+        404:
+          description: 'Query not found'
+  /ping/:
+    get:
+      summary: 'Ping the server'
+      responses:
+        200:
+          description: 'Server is running'
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                description: 'Server status message'
+  /history/:
+    get:
+      summary: 'Get query history'
+      responses:
+        200:
+          description: 'Query history retrieved successfully'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Query'
+definitions:
+  Query:
+    type: object
+    properties:
+      cadastre_number:
+        type: string
+        description: 'Cadastre number of the query'
+      latitude:
+        type: number
+        description: 'Latitude of the query'
+      longitude:
+        type: number
+        description: 'Longitude of the query'
+      external_server_response:
+        type: boolean
+        description: 'External server response'
+      timestamp:
+        type: string
+        format: date-time
+        description: 'Timestamp of the query'

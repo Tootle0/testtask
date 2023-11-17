@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  web:
+    build:
+      context: .
+    command: ["gunicorn", "--bind", "0.0.0.0:8000", "testtask.wsgi:application"]
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
